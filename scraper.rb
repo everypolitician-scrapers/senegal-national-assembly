@@ -22,7 +22,6 @@ def scrape_list(url)
   noko = noko_for(url)
   h2 = noko.xpath('//h2[span[@id="Liste_des_d.C3.A9put.C3.A9s"]]')
   h2.xpath('following-sibling::h2 | following-sibling::h3').slice_before { |e| e.name == 'h2' }.first.each do |h3|
-    puts h3.text.to_s.yellow
     h3.xpath('following-sibling::ul[1]/li').each do |li|
       name, party = li.text.tidy.split(/,\s+/, 2)
       data = { 
@@ -33,7 +32,7 @@ def scrape_list(url)
         type: h3.xpath('span[1]').text,
         source: url,
       }
-      puts data[:name]
+      # puts data[:name]
       ScraperWiki.save_sqlite([:name, :party, :term], data)
     end
   end
