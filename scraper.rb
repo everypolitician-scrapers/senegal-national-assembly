@@ -1,5 +1,6 @@
 #!/bin/env ruby
 # encoding: utf-8
+# frozen_string_literal: true
 
 require 'scraperwiki'
 require 'nokogiri'
@@ -10,7 +11,7 @@ OpenURI::Cache.cache_path = '.cache'
 
 class String
   def tidy
-    self.gsub(/[[:space:]]+/, ' ').strip
+    gsub(/[[:space:]]+/, ' ').strip
   end
 end
 
@@ -24,16 +25,16 @@ def scrape_list(url)
   h2.xpath('following-sibling::h2 | following-sibling::h3').slice_before { |e| e.name == 'h2' }.first.each do |h3|
     h3.xpath('following-sibling::ul[1]/li').each do |li|
       name, party = li.text.tidy.split(/,\s+/, 2)
-      data = { 
-        name: name,
-        party: party,
+      data = {
+        name:     name,
+        party:    party,
         wikiname: li.xpath('.//a[not(@class="new")]/@title').text,
-        term: 2012,
-        type: h3.xpath('span[1]').text,
-        source: url,
+        term:     2012,
+        type:     h3.xpath('span[1]').text,
+        source:   url,
       }
       # puts data[:name]
-      ScraperWiki.save_sqlite([:name, :party, :term], data)
+      ScraperWiki.save_sqlite(%i(name party term), data)
     end
   end
 end
