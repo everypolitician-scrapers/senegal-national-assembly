@@ -33,4 +33,5 @@ def scrape_list(url)
   end
 end
 
+ScraperWiki.sqliteexecute('DELETE FROM data') rescue nil
 scrape_list('https://fr.wikipedia.org/wiki/Liste_des_d%C3%A9put%C3%A9s_du_S%C3%A9n%C3%A9gal_%C3%A9lus_en_2012')
